@@ -9,7 +9,10 @@ import { formatPct, formatUsd } from "@/lib/utils/format";
 import { THEME_CONFIGS } from "@/lib/utils/constants";
 import { cn } from "@/lib/utils/cn";
 
-export const PnlCard = forwardRef<HTMLDivElement, { card: CardData; className?: string }>(({ card, className }, ref) => {
+export const PnlCard = forwardRef<
+  HTMLDivElement,
+  { card: CardData; className?: string; hidePercent?: boolean; hideTvl?: boolean }
+>(({ card, className, hidePercent = false, hideTvl = false }, ref) => {
   const theme = THEME_CONFIGS.find((item) => item.id === card.theme) ?? THEME_CONFIGS[0];
   const usingLossBackground = card.pnlUsd < 0;
   const usingCustomBackground = Boolean(card.customBackgroundUrl) && !usingLossBackground;
@@ -54,18 +57,27 @@ export const PnlCard = forwardRef<HTMLDivElement, { card: CardData; className?: 
             <p className={cn("text-6xl font-extrabold tracking-tight", card.pnlUsd >= 0 ? "text-[rgb(0,255,64)]" : "text-rose-300")}>
               {formatUsd(card.pnlUsd)}
             </p>
-            <p className={cn("text-4xl font-extrabold", card.pnlPct >= 0 ? "text-[rgb(0,255,64)]" : "text-rose-200")}>
-              {formatPct(card.pnlPct)}
-            </p>
+            {!hidePercent && (
+              <p className={cn("text-4xl font-extrabold", card.pnlPct >= 0 ? "text-[rgb(0,255,64)]" : "text-rose-200")}>
+                {formatPct(card.pnlPct)}
+              </p>
+            )}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <Metric label="Duit Sing di Depositaken" value={formatUsd(card.depositUsd)} />
-          <Metric label="Duit Sing di WD" value={formatUsd(card.withdrawnUsd)} />
-          <Metric label="Fees" value={formatUsd(card.feesUsd)} />
-          <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} />
-        </div>
+        {!hideTvl ? (
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <Metric label="Duit Sing di Depositaken" value={formatUsd(card.depositUsd)} />
+            <Metric label="Duit Sing di WD" value={formatUsd(card.withdrawnUsd)} />
+            <Metric label="Fees" value={formatUsd(card.feesUsd)} />
+            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-2 text-sm">
+            <Metric label="Fees" value={formatUsd(card.feesUsd)} />
+            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} />
+          </div>
+        )}
 
         <div className={cn("mt-3 flex items-center gap-2 text-xs text-white/60", card.watermark ? "visible" : "invisible")}>
           <Image src="/discord.svg" alt="Discord" width={16} height={16} className="rounded-sm" />

@@ -16,6 +16,8 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
   const [card, setCard] = useState<CardData>({ ...initialCard, ratio: "1:1" });
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [hidePercent, setHidePercent] = useState(false);
+  const [hideTvl, setHideTvl] = useState(false);
 
   const renderCardPng = async () => {
     if (!cardRef.current) throw new Error("Card not ready");
@@ -139,7 +141,7 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
 
       <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
         <div className="flex justify-center">
-          <PnlCard ref={cardRef} card={card} />
+          <PnlCard ref={cardRef} card={card} hidePercent={hidePercent} hideTvl={hideTvl} />
         </div>
 
         <Card>
@@ -180,6 +182,12 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
 
             <Button variant="secondary" size="sm" onClick={() => setCard((prev) => ({ ...prev, watermark: !prev.watermark }))}>
               Watermark: {card.watermark ? "On" : "Off"}
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => setHidePercent((prev) => !prev)}>
+              Hide Percent: {hidePercent ? "On" : "Off"}
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => setHideTvl((prev) => !prev)}>
+              Hide TVL: {hideTvl ? "On" : "Off"}
             </Button>
 
             <label className="block text-xs text-muted-foreground">
