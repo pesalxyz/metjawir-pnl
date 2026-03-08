@@ -18,6 +18,7 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
   const [message, setMessage] = useState<string | null>(null);
   const [hidePercent, setHidePercent] = useState(false);
   const [hideTvl, setHideTvl] = useState(false);
+  const [hideFees, setHideFees] = useState(false);
 
   const renderCardPng = async () => {
     if (!cardRef.current) throw new Error("Card not ready");
@@ -141,7 +142,7 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
 
       <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
         <div className="flex justify-center">
-          <PnlCard ref={cardRef} card={card} hidePercent={hidePercent} hideTvl={hideTvl} />
+          <PnlCard ref={cardRef} card={card} hidePercent={hidePercent} hideTvl={hideTvl} hideFees={hideFees} />
         </div>
 
         <Card>
@@ -188,6 +189,9 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
             </Button>
             <Button variant="secondary" size="sm" onClick={() => setHideTvl((prev) => !prev)}>
               Hide TVL: {hideTvl ? "On" : "Off"}
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => setHideFees((prev) => !prev)}>
+              Hide Fees: {hideFees ? "On" : "Off"}
             </Button>
 
             <label className="block text-xs text-muted-foreground">

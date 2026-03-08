@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils/cn";
 
 export const PnlCard = forwardRef<
   HTMLDivElement,
-  { card: CardData; className?: string; hidePercent?: boolean; hideTvl?: boolean }
->(({ card, className, hidePercent = false, hideTvl = false }, ref) => {
+  { card: CardData; className?: string; hidePercent?: boolean; hideTvl?: boolean; hideFees?: boolean }
+>(({ card, className, hidePercent = false, hideTvl = false, hideFees = false }, ref) => {
   const theme = THEME_CONFIGS.find((item) => item.id === card.theme) ?? THEME_CONFIGS[0];
   const usingLossBackground = card.pnlUsd < 0;
   const usingCustomBackground = Boolean(card.customBackgroundUrl) && !usingLossBackground;
@@ -69,13 +69,13 @@ export const PnlCard = forwardRef<
           <div className="grid grid-cols-2 gap-2 text-sm">
             <Metric label="Duit Sing di Depositaken" value={formatUsd(card.depositUsd)} />
             <Metric label="Duit Sing di WD" value={formatUsd(card.withdrawnUsd)} />
-            <Metric label="Fees" value={formatUsd(card.feesUsd)} />
-            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} />
+            {!hideFees && <Metric label="Fees" value={formatUsd(card.feesUsd)} />}
+            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} className={hideFees ? "col-start-1" : undefined} />
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-2 text-sm">
-            <Metric label="Fees" value={formatUsd(card.feesUsd)} />
-            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} />
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {!hideFees && <Metric label="Fees" value={formatUsd(card.feesUsd)} className="col-start-1" />}
+            <Metric label="Suwene Wektu" value={card.durationLabel ?? "00:00:00"} className="col-start-1" />
           </div>
         )}
 
