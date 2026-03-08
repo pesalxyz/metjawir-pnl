@@ -1,0 +1,23 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2a1f0f"/>
+      <stop offset="0.45" stop-color="#50331d"/>
+      <stop offset="1" stop-color="#84512b"/>
+    </linearGradient>
+    <radialGradient id="r1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 820) rotate(90) scale(330 760)">
+      <stop stop-color="#ffcf8a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#g1)"/>
+  <rect width="1024" height="1024" fill="url(#r1)"/>
+  <g opacity="0.16" stroke="#f8d3a6" stroke-width="2">
+    <path d="M0 760H1024"/>
+    <path d="M0 670H1024"/>
+    <path d="M0 580H1024"/>
+    <path d="M0 490H1024"/>
+    <path d="M0 400H1024"/>
+  </g>
+  <text x="512" y="130" text-anchor="middle" font-size="56" fill="#fce7c8" font-family="Arial, sans-serif" font-weight="700">METJAWIR V1 1:1</text>
+</svg>

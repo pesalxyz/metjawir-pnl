@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GeneratedCard {
+  id                 String   @id @default(cuid())
+  signature          String   @unique
+  owner              String
+  pairLabel          String
+  protocol           String
+  closeTimestamp     DateTime
+  depositUsd         Float
+  withdrawnUsd       Float
+  feesUsd            Float
+  pnlUsd             Float
+  pnlPct             Float
+  closePrice         Float?
+  poolAddress        String?
+  positionAccount    String?
+  confidence         String
+  warnings           Json
+  theme              String
+  ratio              String
+  watermark          Boolean  @default(true)
+  customBackgroundUrl String?
+  tokenLogoA         String?
+  tokenLogoB         String?
+  rawSummary         Json
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model TxCache {
+  signature      String   @id
+  source         String
+  rawPayload     Json
+  parsedPayload  Json?
+  isMeteora      Boolean?
+  positionAccount String?
+  owner          String?
+  slot           BigInt?
+  blockTime      DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PriceCache {
+  id         String   @id @default(cuid())
+  mint       String
+  timestamp  DateTime
+  priceUsd   Float
+  source     String
+  estimated  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@unique([mint, timestamp])
+  @@index([mint, timestamp])
+}
+
+model AssetMetadataCache {
+  mint       String   @id
+  symbol     String?
+  name       String?
+  logoUri    String?
+  decimals   Int?
+  source     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

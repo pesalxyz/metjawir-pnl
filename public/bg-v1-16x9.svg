@@ -1,0 +1,21 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1f2f1d"/>
+      <stop offset="0.4" stop-color="#406137"/>
+      <stop offset="1" stop-color="#8f8b4a"/>
+    </linearGradient>
+    <radialGradient id="r2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(290 180) rotate(35) scale(620 420)">
+      <stop stop-color="#fff4c8" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#fff4c8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#g2)"/>
+  <rect width="1920" height="1080" fill="url(#r2)"/>
+  <g opacity="0.15" stroke="#eaf0c9" stroke-width="3">
+    <path d="M0 760C260 650 450 650 700 760C950 870 1150 870 1390 760C1600 665 1760 660 1920 710"/>
+    <path d="M0 820C250 710 470 710 690 820C930 940 1150 940 1410 820C1620 720 1760 720 1920 770"/>
+    <path d="M0 880C260 770 480 770 700 880C940 1000 1150 1000 1410 880C1620 780 1760 780 1920 830"/>
+  </g>
+  <text x="960" y="120" text-anchor="middle" font-size="58" fill="#eff4d2" font-family="Arial, sans-serif" font-weight="700">METJAWIR V1 16:9</text>
+</svg>
