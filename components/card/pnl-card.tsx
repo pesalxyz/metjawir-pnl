@@ -11,8 +11,13 @@ import { cn } from "@/lib/utils/cn";
 
 export const PnlCard = forwardRef<HTMLDivElement, { card: CardData; className?: string }>(({ card, className }, ref) => {
   const theme = THEME_CONFIGS.find((item) => item.id === card.theme) ?? THEME_CONFIGS[0];
-  const usingCustomBackground = Boolean(card.customBackgroundUrl);
-  const backgroundImage = card.customBackgroundUrl ? `url(${card.customBackgroundUrl})` : theme.background;
+  const usingLossBackground = card.pnlUsd < 0;
+  const usingCustomBackground = Boolean(card.customBackgroundUrl) && !usingLossBackground;
+  const backgroundImage = usingLossBackground
+    ? "url('/bg-lose.png')"
+    : card.customBackgroundUrl
+      ? `url(${card.customBackgroundUrl})`
+      : theme.background;
 
   return (
     <motion.div
