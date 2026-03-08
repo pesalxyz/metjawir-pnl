@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/db/prisma";
 
 export async function getTxCache(signature: string) {
-  return prisma.txCache.findUnique({ where: { signature } });
+  try {
+    return await prisma.txCache.findUnique({ where: { signature } });
+  } catch {
+    return null;
+  }
 }
 
 export async function setTxCache(input: {
@@ -15,28 +19,32 @@ export async function setTxCache(input: {
   slot?: bigint;
   blockTime?: Date;
 }) {
-  return prisma.txCache.upsert({
-    where: { signature: input.signature },
-    update: {
-      source: input.source,
-      rawPayload: input.rawPayload as object,
-      parsedPayload: input.parsedPayload as object | undefined,
-      isMeteora: input.isMeteora,
-      positionAccount: input.positionAccount,
-      owner: input.owner,
-      slot: input.slot,
-      blockTime: input.blockTime
-    },
-    create: {
-      signature: input.signature,
-      source: input.source,
-      rawPayload: input.rawPayload as object,
-      parsedPayload: input.parsedPayload as object | undefined,
-      isMeteora: input.isMeteora,
-      positionAccount: input.positionAccount,
-      owner: input.owner,
-      slot: input.slot,
-      blockTime: input.blockTime
-    }
-  });
+  try {
+    return await prisma.txCache.upsert({
+      where: { signature: input.signature },
+      update: {
+        source: input.source,
+        rawPayload: input.rawPayload as object,
+        parsedPayload: input.parsedPayload as object | undefined,
+        isMeteora: input.isMeteora,
+        positionAccount: input.positionAccount,
+        owner: input.owner,
+        slot: input.slot,
+        blockTime: input.blockTime
+      },
+      create: {
+        signature: input.signature,
+        source: input.source,
+        rawPayload: input.rawPayload as object,
+        parsedPayload: input.parsedPayload as object | undefined,
+        isMeteora: input.isMeteora,
+        positionAccount: input.positionAccount,
+        owner: input.owner,
+        slot: input.slot,
+        blockTime: input.blockTime
+      }
+    });
+  } catch {
+    return null;
+  }
 }
