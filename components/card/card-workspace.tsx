@@ -100,10 +100,11 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
   };
 
   const onTheme = (theme: CardTheme) => setCard((prev) => ({ ...prev, theme }));
-  const onPresetBackground = (preset: "v1" | "v2") =>
+  const onPresetBackground = (preset: "v1" | "v2" | "lebaran") =>
     setCard((prev) => ({
       ...prev,
-      customBackgroundUrl: preset === "v1" ? "/bg-v1.png" : "/bg-v2.png"
+      customBackgroundUrl:
+        preset === "v1" ? "/bg-v1.png" : preset === "v2" ? "/bg-v2.png" : "/bg-lebaran.png"
     }));
 
   const onUploadBackground = (event: ChangeEvent<HTMLInputElement>) => {
@@ -178,6 +179,13 @@ export function CardWorkspace({ initialCard }: { initialCard: CardData }) {
                 onClick={() => onPresetBackground("v2")}
               >
                 v2
+              </Button>
+              <Button
+                variant={card.customBackgroundUrl === "/bg-lebaran.png" ? "default" : "secondary"}
+                size="sm"
+                onClick={() => onPresetBackground("lebaran")}
+              >
+                lebaran
               </Button>
             </div>
 
