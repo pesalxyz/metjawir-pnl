@@ -1,5 +1,6 @@
 import { getNearestPriceCache, setPriceCache } from "@/lib/cache/priceCache";
 import { PricingResult } from "@/types/domain";
+import { log } from "@/lib/utils/logger";
 
 type ProviderResult = {
   priceUsd: number;
@@ -100,7 +101,17 @@ function fallbackPriceForKnownMints(mint: string): number {
 
 export async function getHistoricalPrice(mint: string, timestamp: number): Promise<PricingResult> {
   const target = new Date(timestamp * 1000);
-  const cached = await getNearestPriceCache(mint, target, 3600);
+  let cached = null;
+
+  try {
+    cached = await getNearestPriceCache(mint, target, 3600);
+  } catch (error) {
+    log("WARN", "Price cache read failed; continuing with live providers", {
+      mint,
+      timestamp,
+      error: error instanceof Error ? error.message : String(error)
+    });
+  }
 
   if (cached) {
     return {
@@ -118,20 +129,34 @@ export async function getHistoricalPrice(mint: string, timestamp: number): Promi
   if (!provider) provider = await fetchDexScreener(mint);
 
   if (!provider) {
+    const fallback = fallbackPriceForKnownMints(mint);
     provider = {
-      priceUsd: fallbackPriceForKnownMints(mint),
+      priceUsd: fallback,
       source: "estimate",
       estimated: true
     };
+
+    if (!fallback) {
+      log("WARN", "No live or fallback price found for mint", { mint, timestamp });
+    }
   }
 
-  await setPriceCache({
-    mint,
-    timestamp: target,
-    priceUsd: provider.priceUsd,
-    source: provider.source,
-    estimated: Boolean(provider.estimated)
-  });
+  try {
+    await setPriceCache({
+      mint,
+      timestamp: target,
+      priceUsd: provider.priceUsd,
+      source: provider.source,
+      estimated: Boolean(provider.estimated)
+    });
+  } catch (error) {
+    log("WARN", "Price cache write failed; using uncached provider result", {
+      mint,
+      timestamp,
+      source: provider.source,
+      error: error instanceof Error ? error.message : String(error)
+    });
+  }
 
   return {
     mint,

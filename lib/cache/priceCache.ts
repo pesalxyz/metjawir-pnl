@@ -4,25 +4,29 @@ export async function getNearestPriceCache(mint: string, timestamp: Date, window
   const from = new Date(timestamp.getTime() - windowSec * 1000);
   const to = new Date(timestamp.getTime() + windowSec * 1000);
 
-  const rows = await prisma.priceCache.findMany({
-    where: {
-      mint,
-      timestamp: {
-        gte: from,
-        lte: to
+  try {
+    const rows = await prisma.priceCache.findMany({
+      where: {
+        mint,
+        timestamp: {
+          gte: from,
+          lte: to
+        }
       }
-    }
-  });
+    });
 
-  if (!rows.length) return null;
+    if (!rows.length) return null;
 
-  rows.sort(
-    (a, b) =>
-      Math.abs(a.timestamp.getTime() - timestamp.getTime()) -
-      Math.abs(b.timestamp.getTime() - timestamp.getTime())
-  );
+    rows.sort(
+      (a, b) =>
+        Math.abs(a.timestamp.getTime() - timestamp.getTime()) -
+        Math.abs(b.timestamp.getTime() - timestamp.getTime())
+    );
 
-  return rows[0];
+    return rows[0];
+  } catch {
+    return null;
+  }
 }
 
 export async function setPriceCache(input: {
@@ -32,24 +36,28 @@ export async function setPriceCache(input: {
   source: string;
   estimated: boolean;
 }) {
-  return prisma.priceCache.upsert({
-    where: {
-      mint_timestamp: {
+  try {
+    return await prisma.priceCache.upsert({
+      where: {
+        mint_timestamp: {
+          mint: input.mint,
+          timestamp: input.timestamp
+        }
+      },
+      update: {
+        priceUsd: input.priceUsd,
+        source: input.source,
+        estimated: input.estimated
+      },
+      create: {
         mint: input.mint,
-        timestamp: input.timestamp
+        timestamp: input.timestamp,
+        priceUsd: input.priceUsd,
+        source: input.source,
+        estimated: input.estimated
       }
-    },
-    update: {
-      priceUsd: input.priceUsd,
-      source: input.source,
-      estimated: input.estimated
-    },
-    create: {
-      mint: input.mint,
-      timestamp: input.timestamp,
-      priceUsd: input.priceUsd,
-      source: input.source,
-      estimated: input.estimated
-    }
-  });
+    });
+  } catch {
+    return null;
+  }
 }

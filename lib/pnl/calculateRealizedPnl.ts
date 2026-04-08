@@ -1,6 +1,7 @@
 import { getHistoricalPrice } from "@/lib/pricing/getHistoricalPrice";
 import { ParsedPositionEvent, PnlSummary, ReconstructedPosition } from "@/types/domain";
 import { safeNum } from "@/lib/utils/format";
+import { log } from "@/lib/utils/logger";
 
 export async function calculateRealizedPnl(position: ReconstructedPosition): Promise<PnlSummary> {
   let totalDepositUsd = 0;
@@ -14,7 +15,14 @@ export async function calculateRealizedPnl(position: ReconstructedPosition): Pro
       const px = await getHistoricalPrice(mint, event.timestamp);
       if (px.estimated) estimatedPricing = true;
       return safeNum(amount) * safeNum(px.priceUsd);
-    } catch {
+    } catch (error) {
+      log("WARN", "Token valuation failed; defaulting token contribution to zero", {
+        mint,
+        timestamp: event.timestamp,
+        signature: event.signature,
+        action: event.action,
+        error: error instanceof Error ? error.message : String(error)
+      });
       estimatedPricing = true;
       return 0;
     }
