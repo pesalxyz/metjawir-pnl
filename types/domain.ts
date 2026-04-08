@@ -49,7 +49,7 @@ export type PricingResult = {
   mint: string;
   timestamp: number;
   priceUsd: number;
-  source: "birdeye" | "jupiter" | "defillama" | "cache" | "estimate";
+  source: "birdeye" | "jupiter" | "defillama" | "geckoterminal" | "coingecko" | "cache" | "estimate";
   estimated: boolean;
 };
 

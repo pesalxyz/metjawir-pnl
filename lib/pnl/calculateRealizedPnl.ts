@@ -12,7 +12,7 @@ export async function calculateRealizedPnl(position: ReconstructedPosition): Pro
 
   const valueToken = async (event: ParsedPositionEvent, mint: string, amount: number) => {
     try {
-      const px = await getHistoricalPrice(mint, event.timestamp);
+      const px = await getHistoricalPrice(mint, event.timestamp, event.poolAddress);
       if (px.estimated) estimatedPricing = true;
       return safeNum(amount) * safeNum(px.priceUsd);
     } catch (error) {
